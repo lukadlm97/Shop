@@ -5,19 +5,72 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Aplication.View"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        
-        <ListBox Margin="0 0 0 0" HorizontalAlignment="Left" Width="400" ItemsSource="{Binding ProductList}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Path=ProductName}" Width="300"/>
-                        <TextBlock Width="50"/>
-                        <TextBlock Text="{Binding Path=ProductPrice}" Width="20" TextAlignment="Right"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox> 
+             d:DesignHeight="650" d:DesignWidth="900">
+
+    <Grid Background="Azure">
+        <StackPanel Orientation="Vertical" Width="370" HorizontalAlignment="Left">
+            <TextBlock Text="Proizvodi" FontSize="22" TextAlignment="Center"   Foreground="SeaGreen"/>
+            <StackPanel Orientation="Horizontal" Background="DarkSlateBlue">
+                <TextBlock Text="Naziv proizvoda:" FontSize="15" Width="240" Foreground="White" Margin="2 0 0 0"/>
+                <TextBlock Text="Cena proizvoda:" HorizontalAlignment="Right" FontSize="15" Foreground="White" Margin="5 0 0 0"/>
+            </StackPanel>
+            <ListBox Margin="0 0 0 0" HorizontalAlignment="Left" Width="370" Height="500" ItemsSource="{Binding ProductList}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Path=ProductName}" Width="280"/>
+                            <TextBlock Width="50"/>
+                            <TextBlock Text="{Binding Path=ProductPrice}" Width="20" TextAlignment="Right"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </StackPanel>
+        <StackPanel Orientation="Vertical" Width="400" HorizontalAlignment="Right">
+            <TextBlock Text="Stavka racuna:" FontSize="18" Margin="5 5 5 5" HorizontalAlignment="Center" />
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="ID:" />
+                <TextBlock Width="340"/>
+                <TextBlock Text="a" HorizontalAlignment="Right"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Naziv proizvoda:"/>
+                <TextBlock Width="340"/>
+                <TextBlock Text="{Binding Path=ProductName}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Cena:"/>
+                <TextBlock Width="340"/>
+                <TextBlock Text="{Binding Path=ProductPrice}"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Proizvodjac:"/>
+                <TextBlock Width="340"/>
+                <TextBlock Text="{Binding Path=ProductProducer}"/>
+            </StackPanel>
+            <Button Content="Unesite na racun" Margin="10 30 10 30" Background="DarkSlateBlue" Foreground="White" FontSize="18" Width="150" Height="80"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Background="Azure" Width="370">
+                <TextBlock Text="Naziv proizvoda:" FontSize="15" Width="150" Foreground="DarkSlateBlue" Margin="2 0 0 0"/>
+                <TextBlock Text="Kolicina:" HorizontalAlignment="Center" FontSize="15" Width="90" Foreground="DarkSlateBlue" Margin="5 0 0 0"/>
+                <TextBlock Text="Cena proizvoda:" HorizontalAlignment="Right" FontSize="15" Foreground="DarkSlateBlue" Margin="5 0 0 0"/>
+            </StackPanel>
+            <ListBox Margin="0 0 0 0" HorizontalAlignment="Left" Width="370" Height="200" ItemsSource="{Binding ProductList}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Path=ProductName}" Width="170"/>
+                            <TextBlock Text="{Binding Path=ProductQuantity}" HorizontalAlignment="Center" Width="110"/>
+                            <TextBlock Text="{Binding Path=ProductPrice}" Width="70"  HorizontalAlignment="Right"
+                                       TextAlignment="Right"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Izbaci stavku racuna" Margin="0 20 0 0" FontSize="15" Background="Red" Foreground="White" />
+                <TextBlock Width="130"/>
+                <Button Content="Stampaj racun" Background="Green" FontSize="15" Foreground="White" Margin="0 20 0 0"/>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </UserControl>

@@ -7,7 +7,7 @@
         xmlns:views="http://schemas.microsoft.com/netfx/2009/xaml/presentation"
         xmlns:views1="clr-namespace:Aplication.View"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Prodavnica" Height="450" Width="800">
     <Grid>
         <views1:ShopView  x:Name="ShopViewControl" Loaded="ShopViewControl_Loaded"/>
     </Grid>
