@@ -29,6 +29,7 @@ namespace Application.ViewModel
             LoadProducer();
             using (SqlConnection connection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Luka\Documents\ShopDB.mdf;Integrated Security=True;Connect Timeout=30"))
             {
+                connection.Open();
                 SqlCommand command = connection.CreateCommand();
                 command.CommandText = "select* from dbo.product";
                 SqlDataReader reader = command.ExecuteReader();
@@ -40,13 +41,14 @@ namespace Application.ViewModel
                     quantityProduct = (int)reader["productquantity"];
                     int producerId = (int)reader["producerid"];
 
-                    foreach(var producer in _producerList)
+                    foreach (var producer in _producerList)
                     {
                         if (producerId == producer.ProducerId)
                             producerProduct = producer;
                     }
+                    productList.Add(new Product(idProduct, nameProduct, priceProduct, quantityProduct, producerProduct));
+
                 }
-                productList.Add(new Product(idProduct,nameProduct,priceProduct,quantityProduct,producerProduct));
             }
             
         }
@@ -60,8 +62,9 @@ namespace Application.ViewModel
             string _cityProducer;
             using (SqlConnection connection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Luka\Documents\ShopDB.mdf;Integrated Security=True;Connect Timeout=30"))
             {
+                connection.Open();
                 SqlCommand command = connection.CreateCommand();
-                string query = "select* from dbo.Producer";
+                string query = $"select* from dbo.Producer";
                 command.CommandText = query;
                 SqlDataReader reader = command.ExecuteReader();
 
@@ -70,7 +73,7 @@ namespace Application.ViewModel
                     _idProducer = (int)reader["ProducerID"];
                     _nameProducer = reader["ProducerName"].ToString();
                     _addressProducer = reader["ProducerAddress"].ToString();
-                    _phoneNumberProducer = reader["ProducerPhoneNumber"].ToString();
+                    _phoneNumberProducer = "000";
                     _cityProducer = reader["ProducerCity"].ToString();
                     Producer newProducer = new Producer(_idProducer,_nameProducer,_addressProducer,_phoneNumberProducer,_cityProducer);
                     _producerList.Add(newProducer);
