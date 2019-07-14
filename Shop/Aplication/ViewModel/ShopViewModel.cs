@@ -6,10 +6,11 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Application.ViewModel
 {
-    public class ShopViewModel
+    public class ShopViewModel:ICommand
     {
         public ObservableCollection<Product> productList = new ObservableCollection<Product>();
 
@@ -18,7 +19,33 @@ namespace Application.ViewModel
             get { return productList; }
             set { productList  = value; }
         }
+
+        private Product _selectedItem;
+
+        public Product SelectedItem
+        {
+            get { return _selectedItem; }
+            set { _selectedItem = value; }
+        }
+
+        private ObservableCollection<Product> _billList = new ObservableCollection<Product>();
+
+        public ObservableCollection<Product> BillList
+        {
+            get { return _billList; }
+            set { _billList = value; }
+        }
+
         List<Producer> _producerList = new List<Producer>();
+
+        public event EventHandler CanExecuteChanged;
+
+        public ICommand AddItemCommand
+        {
+            get;
+            private set;
+        }
+
         public ShopViewModel()
         {
             int idProduct=0;
@@ -51,6 +78,31 @@ namespace Application.ViewModel
                 }
             }
             
+            
+        }
+
+        private void AddBillItem()
+        {
+            int id = SelectedItem.ProductId;
+            string name = SelectedItem.ProductName;
+            decimal price = SelectedItem.ProductPrice;
+            Producer producer = SelectedItem.ProductProducer;
+            Product newBillItem = new Product(id, name, price, 0, producer);
+            if (_billList == null)
+            {   
+                _billList.Add(newBillItem);
+                return;
+            }
+            foreach(var item in _billList)
+            {
+                if(item.ProductId == SelectedItem.ProductId)
+                {
+                    item.ProductQuantity++;
+                    return;
+                }
+            }
+            _billList.Add(newBillItem);
+            return;
         }
 
         private void LoadProducer()
@@ -79,6 +131,16 @@ namespace Application.ViewModel
                     _producerList.Add(newProducer);
                 }
             }
+        }
+
+        public bool CanExecute(object parameter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Execute(object parameter)
+        {
+            throw new NotImplementedException();
         }
     }
 }
