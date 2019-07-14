@@ -50,7 +50,7 @@
                 <TextBlock Text="Kolicina:" HorizontalAlignment="Center" FontSize="15" Width="90" Foreground="DarkSlateBlue" Margin="5 0 0 0"/>
                 <TextBlock Text="Cena proizvoda:" HorizontalAlignment="Right" FontSize="15" Foreground="DarkSlateBlue" Margin="5 0 0 0"/>
             </StackPanel>
-            <ListBox Margin="0 0 0 0" HorizontalAlignment="Left" Width="370" Height="200" ItemsSource="{Binding BillList}">
+            <ListBox Margin="0 0 0 0" HorizontalAlignment="Left" Width="370" Height="200" SelectedItem="{Binding SelectedBillItem}" ItemsSource="{Binding BillList}">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
@@ -67,9 +67,9 @@
                 <TextBlock Text="{Binding Path=Bill.TotalBill}" Foreground="White" FontSize="18" Margin="3 3 3 3"/>
             </StackPanel>
             <StackPanel Orientation="Horizontal">
-                <Button Content="Izbaci stavku racuna" Margin="0 20 0 0" FontSize="15" Background="Red" Foreground="White" />
+                <Button Content="Izbaci stavku racuna" Command="{Binding Path=RemoveBillItemCommand}" Margin="0 20 0 0" FontSize="15" Background="Red" Foreground="White" />
                 <TextBlock Width="130"/>
-                <Button Content="Stampaj racun" Background="Green" FontSize="15" Foreground="White" Margin="0 20 0 0"/>
+                <Button Content="Stampaj racun" Command="{Binding Path=CreateReportCommand}" Background="Green" FontSize="15" Foreground="White" Margin="0 20 0 0"/>
             </StackPanel>
         </StackPanel>
     </Grid>

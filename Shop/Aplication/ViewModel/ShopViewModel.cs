@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -44,6 +45,14 @@ namespace Application.ViewModel
             set { _bill = value; }
         }
 
+        private Product _selectedBillItem;
+
+        public Product SelectedBillItem
+        {
+            get { return _selectedBillItem; }
+            set { _selectedBillItem = value; }
+        }
+
 
         List<Producer> _producerList = new List<Producer>();
 
@@ -52,6 +61,19 @@ namespace Application.ViewModel
             get;
             set;
         }
+
+        public ICommand RemoveBillItemCommand
+        {
+            get;
+            set;
+        }
+
+        public ICommand CreateReportCommand
+        {
+            get;
+            set;
+        }
+
 
         public ShopViewModel()
         {
@@ -83,8 +105,10 @@ namespace Application.ViewModel
                     productList.Add(new Product(idProduct, nameProduct, priceProduct, quantityProduct, producerProduct));
                 }
             }
-            Bill = new Bill();
-            AddNewBillItemCommand = new Command(ExecuteAddBillItemMethod,CanExecuteMethod);   
+            Bill = new Bill(0,0);
+            AddNewBillItemCommand = new Command(ExecuteAddBillItemMethod,CanExecuteMethod);
+            RemoveBillItemCommand = new Command(ExecuteRemoveBillItemMethod,CanExecuteMethod);
+            CreateReportCommand = new Command(ExecuteCreateReportMethod,CanExecuteMethod);
         }
 
         private bool CanExecuteMethod(object parametar)
@@ -96,13 +120,44 @@ namespace Application.ViewModel
             AddBillItem();
         }
 
+        private void ExecuteRemoveBillItemMethod(object parametar)
+        {
+            RemoveBillItem();
+        }
+
+        private void ExecuteCreateReportMethod(object parametar)
+        {
+            CreateReport();
+        }
+
+        private void RemoveBillItem()
+        {
+            Func<decimal, decimal, decimal> compute = CalculateMinusSumBill;
+            foreach(var billItem in _billList)
+            {
+                if(SelectedBillItem.ProductId == billItem.ProductId)
+                {
+                    if(billItem.ProductQuantity == 1)
+                    {
+                        billItem.ProductQuantity--;
+                        Bill.TotalBill = compute(Bill.TotalBill, billItem.ProductPrice);
+                        _billList.Remove(SelectedBillItem);
+                        return;
+                    }
+                    billItem.ProductQuantity--;
+                    Bill.TotalBill = compute(Bill.TotalBill, billItem.ProductPrice);
+                    return;
+                }
+            }
+        }
+
         private void AddBillItem()
         {
             Product newBillItem = CreatNewProductItem();
             Func<decimal, decimal, decimal> add = CalculateSumBill;
             if (_billList.Count == 0)
             {
-                Bill.IdBill = 1;
+               // Bill.IdBill = 1;
                 Bill.TotalBill = 0;
                 _billList.Add(newBillItem);
                 Bill.TotalBill = add(Bill.TotalBill, newBillItem.ProductPrice);
@@ -120,6 +175,51 @@ namespace Application.ViewModel
             _billList.Add(newBillItem);
             Bill.TotalBill = add(Bill.TotalBill, newBillItem.ProductPrice);
             return;
+        }
+
+        private void CreateReport()
+        {
+            string path = @"C:\Users\Luka\Desktop\Shop\Shop\Aplication\Bills\"+Bill.IdBill+".txt";
+            if (!File.Exists(path))
+            {
+                using (StreamWriter sw = File.CreateText(path))
+                {
+                    string star = "*";
+                    string line = "-";
+                    sw.WriteLine(star.PadLeft(100,'*'));
+                    sw.WriteLine("Fiskalni racun u nasoj prodavnici!");
+                    sw.WriteLine(star.PadLeft(100, '*'));
+                    sw.WriteLine();
+                    sw.WriteLine("Racun ID:" +Bill.IdBill);
+                    sw.WriteLine(star.PadLeft(100, '*'));
+                    sw.WriteLine("Naziv stavke racuna:"+"\t\t"+"Kolicina"+"\t\t"+"Cena"+"\t\t"+"Ukupan iznos");
+                    foreach(var item in _billList)
+                    {
+                        decimal sumForItem = item.ProductPrice * item.ProductQuantity;
+                        sw.WriteLine(item.ProductName+"\t\t\t"+item.ProductQuantity+"\t\t\t"+item.ProductPrice+"\t\t\t"+sumForItem);
+                    }
+                    sw.WriteLine(line.PadLeft(100, '-'));
+                    sw.WriteLine("Ukupno:\t\t\t\t\t\t\t\t\t\t"+Bill.TotalBill);
+                    sw.WriteLine(star.PadLeft(100, '*'));
+                }
+            }
+            int reportId = Bill.IdBill+ 1;
+            createNewBill(reportId);
+            RemoveAllBillItems();
+        }
+
+        public void RemoveAllBillItems()
+        {
+            var temp = _billList.ToList<Product>();
+            foreach(var item in temp)
+            {
+                _billList.Remove(item);
+            }
+        }
+        public void createNewBill(int id)
+        {
+            Bill.IdBill = id;
+            Bill.TotalBill = 0;
         }
 
         private Product CreatNewProductItem()
@@ -165,5 +265,9 @@ namespace Application.ViewModel
             return currentBill + newItemBill; 
         }
        
+        static decimal CalculateMinusSumBill(decimal currentBill,decimal dropItemBill)
+        {
+            return currentBill - dropItemBill;
+        }
     }
 }

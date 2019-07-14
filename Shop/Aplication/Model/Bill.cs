@@ -20,6 +20,16 @@ namespace Application.Model
             }
         }
 
+        public Bill()
+        {
+
+        }
+
+        public Bill(int id,decimal total)
+        {
+            this.IdBill = id;
+            this.TotalBill = total;
+        }
 
         private decimal _totalBill;
 
