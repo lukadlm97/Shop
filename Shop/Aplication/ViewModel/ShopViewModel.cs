@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace Application.ViewModel
 {
-    public class ShopViewModel:ICommand
+    public class ShopViewModel
     {
         public ObservableCollection<Product> productList = new ObservableCollection<Product>();
 
@@ -36,23 +36,30 @@ namespace Application.ViewModel
             set { _billList = value; }
         }
 
+        private Bill _bill;
+
+        public Bill Bill
+        {
+            get { return _bill; }
+            set { _bill = value; }
+        }
+
+
         List<Producer> _producerList = new List<Producer>();
 
-        public event EventHandler CanExecuteChanged;
-
-        public ICommand AddItemCommand
+        public ICommand AddNewBillItemCommand
         {
             get;
-            private set;
+            set;
         }
 
         public ShopViewModel()
         {
-            int idProduct=0;
+            int idProduct = 0;
             string nameProduct="";
             decimal priceProduct=0m;
-            int quantityProduct=0;
-            Producer producerProduct=null;
+            int quantityProduct = 0;
+            Producer producerProduct = null;
             LoadProducer();
             using (SqlConnection connection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Luka\Documents\ShopDB.mdf;Integrated Security=True;Connect Timeout=30"))
             {
@@ -74,23 +81,31 @@ namespace Application.ViewModel
                             producerProduct = producer;
                     }
                     productList.Add(new Product(idProduct, nameProduct, priceProduct, quantityProduct, producerProduct));
-
                 }
             }
-            
-            
+            Bill = new Bill();
+            AddNewBillItemCommand = new Command(ExecuteAddBillItemMethod,CanExecuteMethod);   
+        }
+
+        private bool CanExecuteMethod(object parametar)
+        {
+            return true;
+        }
+        private void ExecuteAddBillItemMethod(object parametar)
+        {
+            AddBillItem();
         }
 
         private void AddBillItem()
         {
-            int id = SelectedItem.ProductId;
-            string name = SelectedItem.ProductName;
-            decimal price = SelectedItem.ProductPrice;
-            Producer producer = SelectedItem.ProductProducer;
-            Product newBillItem = new Product(id, name, price, 0, producer);
-            if (_billList == null)
-            {   
+            Product newBillItem = CreatNewProductItem();
+            Func<decimal, decimal, decimal> add = CalculateSumBill;
+            if (_billList.Count == 0)
+            {
+                Bill.IdBill = 1;
+                Bill.TotalBill = 0;
                 _billList.Add(newBillItem);
+                Bill.TotalBill = add(Bill.TotalBill, newBillItem.ProductPrice);
                 return;
             }
             foreach(var item in _billList)
@@ -98,11 +113,23 @@ namespace Application.ViewModel
                 if(item.ProductId == SelectedItem.ProductId)
                 {
                     item.ProductQuantity++;
+                    Bill.TotalBill = add(Bill.TotalBill, newBillItem.ProductPrice);
                     return;
                 }
             }
             _billList.Add(newBillItem);
+            Bill.TotalBill = add(Bill.TotalBill, newBillItem.ProductPrice);
             return;
+        }
+
+        private Product CreatNewProductItem()
+        {
+            int id = SelectedItem.ProductId;
+            string name = SelectedItem.ProductName;
+            decimal price = SelectedItem.ProductPrice;
+            Producer producer = SelectedItem.ProductProducer;
+
+            return new Product(id, name, price, 1, producer);
         }
 
         private void LoadProducer()
@@ -133,14 +160,10 @@ namespace Application.ViewModel
             }
         }
 
-        public bool CanExecute(object parameter)
+        static decimal CalculateSumBill(decimal currentBill,decimal newItemBill)
         {
-            throw new NotImplementedException();
+            return currentBill + newItemBill; 
         }
-
-        public void Execute(object parameter)
-        {
-            throw new NotImplementedException();
-        }
+       
     }
 }
