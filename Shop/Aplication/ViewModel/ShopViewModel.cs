@@ -155,24 +155,31 @@ namespace Application.ViewModel
         {
             Product newBillItem = CreatNewProductItem();
             Func<decimal, decimal, decimal> add = CalculateSumBill;
-            if (_billList.Count == 0)
+            if (_billList.Count == 0 && SelectedItem.ProductQuantity > 0)
             {
                // Bill.IdBill = 1;
                 Bill.TotalBill = 0;
                 _billList.Add(newBillItem);
+                SelectedItem.ProductQuantity--;
                 Bill.TotalBill = add(Bill.TotalBill, newBillItem.ProductPrice);
                 return;
             }
             foreach(var item in _billList)
             {
-                if(item.ProductId == SelectedItem.ProductId)
+                if(item.ProductId == SelectedItem.ProductId && SelectedItem.ProductQuantity > 0)
                 {
                     item.ProductQuantity++;
+                    SelectedItem.ProductQuantity--;
                     Bill.TotalBill = add(Bill.TotalBill, newBillItem.ProductPrice);
                     return;
                 }
             }
+            if (SelectedItem.ProductQuantity <= 0)
+            {
+                return;
+            }
             _billList.Add(newBillItem);
+            SelectedItem.ProductQuantity--;
             Bill.TotalBill = add(Bill.TotalBill, newBillItem.ProductPrice);
             return;
         }
@@ -203,9 +210,25 @@ namespace Application.ViewModel
                     sw.WriteLine(star.PadLeft(100, '*'));
                 }
             }
+            RefreshDataBase();
             int reportId = Bill.IdBill+ 1;
             createNewBill(reportId);
             RemoveAllBillItems();
+        }
+
+        private void RefreshDataBase()
+        {
+           using(SqlConnection connection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\Luka\Documents\ShopDB.mdf;Integrated Security=True;Connect Timeout=30"))
+            {
+                connection.Open();
+                SqlCommand command = connection.CreateCommand();
+                foreach(var product in productList)
+                {
+                    command.CommandText = $"UPDATE dbo.Product SET productQuantity = {product.ProductQuantity} WHERE productid = {product.ProductId}";
+                    command.ExecuteNonQuery();
+                    
+                }
+            }
         }
 
         public void RemoveAllBillItems()
