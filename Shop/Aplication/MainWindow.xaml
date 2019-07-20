@@ -6,9 +6,10 @@
         xmlns:local="clr-namespace:Application"
         xmlns:views="http://schemas.microsoft.com/netfx/2009/xaml/presentation"
         xmlns:views1="clr-namespace:Aplication.View"
+        xmlns:views11="clr-namespace:Application.View"
         mc:Ignorable="d"
         Title="Prodavnica" Height="650" Width="800">
     <Grid>
-        <views1:ShopView  x:Name="ShopViewControl" Loaded="ShopViewControl_Loaded"/>
+        <views11:MagacinView  x:Name="MagacinViewControl" Loaded="MagacinViewControl_Loaded"/>
     </Grid>
 </Window>

@@ -28,7 +28,13 @@ namespace Application
         private void ShopViewControl_Loaded(object sender, RoutedEventArgs e)
         {
             Application.ViewModel.ShopViewModel shopViewModelObj = new Application.ViewModel.ShopViewModel();
-            ShopViewControl.DataContext = shopViewModelObj;
+            //ShopViewControl.DataContext = shopViewModelObj;
+        }
+
+        private void MagacinViewControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            Application.ViewModel.MagacinViewModel magacinViewModelObj = new Application.ViewModel.MagacinViewModel();
+            MagacinViewControl.DataContext = magacinViewModelObj;
         }
     }
 }
