@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Application.ViewModel
 {
@@ -29,11 +30,47 @@ namespace Application.ViewModel
         }
 
 
+        private Product _selectedItem;
+
+        public Product SelectedItem
+        {
+            get { return _selectedItem; }
+            set { _selectedItem = value; }
+        }
+
+        private Product _newProduct;
+
+        public Product NewProduct
+        {
+            get { return _newProduct; }
+            set { _newProduct = value; }
+        }
+
+
+        public ICommand AddNewProductInMagacinCommand { get; set; }
+
+
+
         public MagacinViewModel()
         {
             LoadProducer();
             LoadProductList();
-         
+            AddNewProductInMagacinCommand = new Command(AddNewProductInMagacinMethod, CanExecuteMethod);
+        }
+
+        private bool CanExecuteMethod(object parametar)
+        {
+            return true;
+        }
+
+        private void AddNewProductInMagacinMethod(object parametar)
+        {
+            AddNewProductInMagacin();
+        }
+
+        private void AddNewProductInMagacin()
+        {
+            _products.Add(NewProduct);
         }
 
         public void LoadProductList()
