@@ -37,19 +37,19 @@
             <TextBlock Text="ID proizvoda:"  FontSize="16" HorizontalAlignment="Center" Foreground="Green" Margin="0 5 0 0"/>
         </StackPanel>
 
-        <TextBox Name="IDProduct" Text="{Binding Path=NewProduct.ProductId}" Foreground="White" Background="GreenYellow" FontWeight="Bold" Grid.Row="1" Width="220" Height="30" TextAlignment="Center" FontSize="16" Grid.Column="1"/>
+        <TextBox Name="IDProduct" Text="{Binding Path=NewProduct.ProductId,Mode=TwoWay}" Foreground="White" Background="GreenYellow" FontWeight="Bold" Grid.Row="1" Width="220" Height="30" TextAlignment="Center" FontSize="16" Grid.Column="1"/>
 
         <TextBlock Text="Naziv proizvoda:" Foreground="Green" FontSize="16" HorizontalAlignment="Center" Grid.Column="1" Grid.Row="2" Margin="36,0"/>
-        <TextBox Name="NameProduct" Text="{Binding Path=NewProduct.ProductName}" Foreground="White" Background="GreenYellow" FontWeight="Bold" Grid.Row="3" Width="220"  Height="30" TextAlignment="Center" FontSize="16"  Grid.Column="1"/>
+        <TextBox Name="NameProduct" Text="{Binding Path=NewProduct.ProductName,Mode=TwoWay}" Foreground="White" Background="GreenYellow" FontWeight="Bold" Grid.Row="3" Width="220"  Height="30" TextAlignment="Center" FontSize="16"  Grid.Column="1"/>
 
         <TextBlock Text="Cena proizvoda:" FontSize="16" Foreground="Green" HorizontalAlignment="Center" Grid.Row="4"  Grid.Column="1" Margin="37,0"/>
-        <TextBox Name="PriceProduct"  Text="{Binding Path=NewProduct.ProductPrice}" Foreground="White" Background="GreenYellow" FontWeight="Bold" Grid.Row="5" Width="220"  Height="30" TextAlignment="Center" FontSize="16" Grid.Column="1"/>
+        <TextBox Name="PriceProduct"  Text="{Binding Path=NewProduct.ProductPrice,Mode=TwoWay}" Foreground="White" Background="GreenYellow" FontWeight="Bold" Grid.Row="5" Width="220"  Height="30" TextAlignment="Center" FontSize="16" Grid.Column="1"/>
 
         <TextBlock Text="Kolicina proizvoda:" FontSize="16" Foreground="Green" HorizontalAlignment="Center"  Grid.Column="1" Grid.Row="6" Margin="30,0"/>
-        <TextBox Name="QuantityProduct" Text="{Binding Path=NewProduct.ProductQuantity}" Width="220" Foreground="White" Background="GreenYellow" FontWeight="Bold" Height="30" TextAlignment="Center" FontSize="16" Grid.Row="7"  Grid.Column="1"/>
+        <TextBox Name="QuantityProduct" Text="{Binding Path=NewProduct.ProductQuantity,Mode=TwoWay}" Width="220" Foreground="White" Background="GreenYellow" FontWeight="Bold" Height="30" TextAlignment="Center" FontSize="16" Grid.Row="7"  Grid.Column="1"/>
 
         <TextBlock Text="Proizvodjac proizvoda:" FontSize="16" Foreground="Green" HorizontalAlignment="Center" Grid.Row="8"  Grid.Column="1" Margin="20,0"/>
-        <ComboBox Grid.Row="9" Foreground="Green"  FontWeight="Bold"  Text="{Binding Path=NewProduct.ProductProducer}" ItemsSource="{Binding ProducerList}"  Grid.Column="1" Height="45">
+        <ComboBox Grid.Row="9" Foreground="Green"  FontWeight="Bold"  Text="{Binding Path=NewProduct.ProductProducer,Mode=TwoWay}" ItemsSource="{Binding ProducerList}"  Grid.Column="1" Height="45">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding ProducerName}" TextAlignment="Center"  Grid.Column="1" Margin="35 10 10 10" FontSize="16"/>
